@@ -90,7 +90,7 @@ func newConnect(instance string) (db *gorm.DB, err error) {
 	}
 	config := configMap[instance]
 	masterDSN := fmt.Sprintf(
-		"%s:%s@tcp(%s:%d)/%s?parseTime=True&charset=%s",
+		"%s:%s@tcp(%s:%d)/%s?parseTime=True&loc=Local&charset=%s",
 		config.Master.UserName,
 		config.Master.Password,
 		config.Master.Host,
@@ -101,7 +101,7 @@ func newConnect(instance string) (db *gorm.DB, err error) {
 	var replicas []gorm.Dialector
 	for _, conf := range config.Slave {
 		slaveDSN := fmt.Sprintf(
-			"%s:%s@tcp(%s:%d)/%s?parseTime=True&charset=%s",
+			"%s:%s@tcp(%s:%d)/%s?parseTime=True&loc=Local&charset=%s",
 			conf.UserName,
 			conf.Password,
 			conf.Host,
