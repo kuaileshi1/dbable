@@ -62,6 +62,7 @@ func Init(config *MysqlConfig, instance string) {
 func GetMysql(instance string) (db *gorm.DB, err error) {
 	if mysqlPool, ok := mysqlPollMap.Load(instance); ok {
 		db = mysqlPool.(*gorm.DB)
+		_, err = db.DB()
 		if err == nil {
 			return
 		}
@@ -126,7 +127,7 @@ func newConnect(instance string) (db *gorm.DB, err error) {
 			}
 
 			var DB *sql.DB
-			DB, err = db.DB()
+			DB, _ = db.DB()
 			if pErr := DB.Ping(); pErr != nil {
 				return nil, pErr
 			}
