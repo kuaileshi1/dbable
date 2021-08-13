@@ -62,9 +62,7 @@ func Init(config *MysqlConfig, instance string) {
 func GetMysql(instance string) (db *gorm.DB, err error) {
 	if mysqlPool, ok := mysqlPollMap.Load(instance); ok {
 		db = mysqlPool.(*gorm.DB)
-		var DB *sql.DB
-		DB, err = db.DB()
-		if err == nil && DB.Ping() == nil {
+		if err == nil {
 			return
 		}
 		mysqlPollMap.Delete(instance)
@@ -122,9 +120,15 @@ func newConnect(instance string) (db *gorm.DB, err error) {
 				Replicas: replicas,
 			}).SetMaxOpenConns(config.MaxOpenCon).
 				SetMaxIdleConns(config.MaxIdleCon).
-				SetConnMaxLifetime(config.MaxLifeTime))
+				SetConnMaxLifetime(config.MaxLifeTime * time.Second))
 			if debug {
 				db = db.Debug()
+			}
+
+			var DB *sql.DB
+			DB, err = db.DB()
+			if pErr := DB.Ping(); pErr != nil {
+				return nil, pErr
 			}
 		}
 
