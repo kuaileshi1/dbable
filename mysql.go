@@ -23,11 +23,11 @@ var (
 
 // gorm mysql配置定义
 type MysqlConfig struct {
-	Driver      string        `yaml:"driver"`
-	Master      *DSNConfig    `yaml:"master"`
-	Slave       []*DSNConfig  `yaml`
-	MaxOpenCon  int           `yam:"maxOpenCon"`
-	MaxIdleCon  int           `yam:maxIdleCon`
+	Driver      string     `yaml:"driver"`
+	Master      *DSNConfig `yaml:"master"`
+	Slave       []*DSNConfig
+	MaxOpenCon  int           `yaml:"maxOpenCon"`
+	MaxIdleCon  int           `yaml:maxIdleCon`
 	MaxLifeTime time.Duration `yaml:"maxLifeTime"`
 }
 
