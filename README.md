@@ -29,6 +29,14 @@ slaveDSN := &dbable.DSNConfig{
     DbName:   "test",
     Charset:  "utf8",
 }
+logConfig := &dbable.LogConfig{
+    LogPath:                   "./logs",
+    MaxAge:                    24 * 31,
+    RotationTime:              24 * 7,
+    LogLevel:                  "info",
+    SlowThreshold:             200,
+    IgnoreRecordNotFoundError: false,
+}
 config := &dbable.MysqlConfig{
     Driver:      "mysql",
     Master:      masterDSN,
@@ -36,6 +44,7 @@ config := &dbable.MysqlConfig{
     MaxOpenCon:  10,
     MaxIdleCon:  5,
     MaxLifeTime: time.Second * 10,
+    Logger:      logConfig,
 }
 dbable.Init(config, "test")
 db, _ := dbable.GetMysql("test")

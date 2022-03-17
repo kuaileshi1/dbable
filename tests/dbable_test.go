@@ -22,7 +22,7 @@ func TestSelect(t *testing.T) {
 		Host:     "127.0.0.1",
 		Port:     3306,
 		UserName: "root",
-		Password: "123456",
+		Password: "12345678",
 		DbName:   "test",
 		Charset:  "utf8",
 	}
@@ -30,9 +30,17 @@ func TestSelect(t *testing.T) {
 		Host:     "127.0.0.1",
 		Port:     3306,
 		UserName: "root",
-		Password: "123456",
+		Password: "12345678",
 		DbName:   "test",
 		Charset:  "utf8",
+	}
+	logConfig := &dbable.LogConfig{
+		LogPath:                   "./logs",
+		MaxAge:                    24 * 31,
+		RotationTime:              24 * 7,
+		LogLevel:                  "info",
+		SlowThreshold:             200,
+		IgnoreRecordNotFoundError: false,
 	}
 	config := &dbable.MysqlConfig{
 		Driver:      "mysql",
@@ -41,6 +49,7 @@ func TestSelect(t *testing.T) {
 		MaxOpenCon:  10,
 		MaxIdleCon:  5,
 		MaxLifeTime: time.Second * 10,
+		Logger:      logConfig,
 	}
 	dbable.Init(config, "test")
 	db, _ := dbable.GetMysql("test")

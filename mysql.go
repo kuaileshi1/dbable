@@ -29,6 +29,7 @@ type MysqlConfig struct {
 	MaxOpenCon  int           `yaml:"maxOpenCon"`
 	MaxIdleCon  int           `yaml:maxIdleCon`
 	MaxLifeTime time.Duration `yaml:"maxLifeTime"`
+	Logger      *LogConfig    `yaml:"logger"`
 }
 
 // DSN配置定义
@@ -124,6 +125,9 @@ func newConnect(instance string) (db *gorm.DB, err error) {
 				SetConnMaxLifetime(config.MaxLifeTime * time.Second))
 			if debug {
 				db = db.Debug()
+			}
+			if config.Logger != nil {
+				db.Logger = newLogger(config.Logger)
 			}
 
 			var DB *sql.DB
